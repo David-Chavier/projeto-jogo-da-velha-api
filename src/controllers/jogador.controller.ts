@@ -3,20 +3,20 @@ import { Jogador } from "../models/jogador";
 import { jogadores } from "../database/jogadores";
 
 export class JogadorController {
-  public create(req: Request, res: Response) {
-    try {
-      const { nome } = req.body;
-      const jogador = new Jogador(nome);
+  // public create(req: Request, res: Response) {
+  //   try {
+  //     const { nome } = req.body;
+  //     const jogador = new Jogador(nome);
 
-      jogadores.push(jogador);
+  //     jogadores.push(jogador);
 
-      res
-        .status(200)
-        .send({ ok: true, message: "jogador criado", data: jogador });
-    } catch (err: any) {
-      return;
-    }
-  }
+  //     res
+  //       .status(200)
+  //       .send({ ok: true, message: "jogador criado", data: jogador });
+  //   } catch (err: any) {
+  //     return;
+  //   }
+  // }
 
   public delete(req: Request, res: Response) {
     try {

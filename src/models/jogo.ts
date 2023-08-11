@@ -2,6 +2,7 @@ import { v4 as createUuid } from "uuid";
 
 export class Jogo {
   private _id: string;
+  private _valor: string;
   private _tabuleiro: string[];
   private _id_jogador02: string;
 
@@ -13,6 +14,15 @@ export class Jogo {
   public get id() {
     return this._id;
   }
+
+  public get valor() {
+    return this._valor;
+  }
+
+  public set valor(novoValor: string) {
+    this._valor = novoValor;
+  }
+
   public get tabuleiro() {
     return this._tabuleiro;
   }

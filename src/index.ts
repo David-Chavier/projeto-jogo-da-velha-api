@@ -14,9 +14,11 @@ const http = require("http").Server(app);
 export const io = require("socket.io")(http);
 app.use(cors());
 
-app.post("/jogador", new JogadorController().create);
+app.get("/jogo/:id", new JogosController().listById);
+
+// app.post("/jogador", new JogadorController().create);
 app.delete("/jogador/:id", new JogadorController().delete);
-app.get("/jogador/jogo", new JogosController().list);
+app.get("/jogador/:id_jogador02/jogo/:id", new JogosController().list);
 app.post("/jogador/:id_jogador01/jogo", new JogosController().create);
 app.put(
   "/jogador/:id_jogador01/jogo/:id/:id_jogador02",
