@@ -4,15 +4,13 @@ import http from "http"; // Importe o módulo http diretamente
 import { Server } from "socket.io"; // Importe o módulo Server do socket.io
 import * as dotenv from "dotenv";
 import { JogosController } from "./controllers/jogos.controller";
-
 dotenv.config();
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 
 const server = http.createServer(app); // Crie o servidor http
-
-app.use(cors());
-app.use(express.json());
 
 export const io = new Server(server, {
   cors: {
@@ -27,6 +25,10 @@ io.on("connection", (socket) => {
   socket.on("chatMessage", (message) => {
     io.emit("chatMessage", message); // Envia a mensagem para todos os clientes
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Servidor Express e Socket.IO funcionando!");
 });
 
 // server.listen(process.env.PT_SOCKET || 3001);
@@ -44,6 +46,6 @@ app.put(
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`app is running ${PORT}`);
 });
