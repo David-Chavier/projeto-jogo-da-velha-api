@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001);
+server.listen(process.env.PT_SOCKET);
 
 app.get("/jogo/:id", new JogosController().listById);
 
