@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Jogo } from "../models/jogo";
 import { jogos } from "../database/jogos";
-import { io } from "..";
+import { io } from "../index";
 
 export class JogosController {
   public create(req: Request, res: Response) {
@@ -130,7 +130,7 @@ export class JogosController {
 
       Jogo.tabuleiro.splice(index, 1, valorVariavel);
 
-      io.emit("atualizacao", jogos[jogos.length - 1]);
+      io.emit("atualizacao", Jogo.toJson());
 
       res.status(200).send({
         ok: true,
