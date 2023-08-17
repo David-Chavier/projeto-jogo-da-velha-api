@@ -7,7 +7,7 @@ export class Jogo {
   private _id_jogador02: string;
 
   constructor(private _id_jogador01: string) {
-    this._id = createUuid().slice(0, 5);
+    this._id = createUuid().slice(0, 4);
     this._tabuleiro = ["", "", "", "", "", "", "", "", ""];
   }
 
