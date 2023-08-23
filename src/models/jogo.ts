@@ -4,11 +4,13 @@ export class Jogo {
   private _id: string;
   private _valor: string;
   private _tabuleiro: string[];
+  private _vitoria: number[];
   private _id_jogador02: string;
 
   constructor(private _id_jogador01: string) {
     this._id = createUuid().slice(0, 4);
     this._tabuleiro = ["", "", "", "", "", "", "", "", ""];
+    this._vitoria = [];
   }
 
   public get id() {
@@ -31,6 +33,10 @@ export class Jogo {
     return this._id_jogador01;
   }
 
+  public get vitoria() {
+    return this._vitoria;
+  }
+
   public get id_jogador02() {
     return this._id_jogador02;
   }
@@ -45,6 +51,7 @@ export class Jogo {
       id_jogador01: this.id_jogador01,
       id_jogador02: this.id_jogador02,
       tabuleiro: this.tabuleiro,
+      vitoria: this.vitoria,
     };
   }
 }

@@ -69,13 +69,21 @@ export class JogosController {
   public update(req: Request, res: Response) {
     try {
       const { id, id_jogador01, id_jogador02 } = req.params;
-      const { index, valor } = req.body;
+      const { index } = req.body;
       const Jogo = jogos.find((jogo) => jogo.id === id);
 
       if (!Jogo) {
         return res
           .status(404)
           .send({ ok: false, message: "Jogo was not found" });
+      }
+
+      if (Jogo.vitoria.length > 0) {
+        return res.status(403).send({
+          ok: false,
+          message: "Já temos um vencedor",
+          data: Jogo.toJson(),
+        });
       }
 
       if (
@@ -129,6 +137,72 @@ export class JogosController {
       }
 
       Jogo.tabuleiro.splice(index, 1, valorVariavel);
+
+      if (
+        Jogo.tabuleiro[0] === Jogo.tabuleiro[1] &&
+        Jogo.tabuleiro[1] === Jogo.tabuleiro[2] &&
+        Jogo.tabuleiro[2] !== ""
+      ) {
+        Jogo.vitoria.push(0, 1, 2);
+      }
+
+      if (
+        Jogo.tabuleiro[3] === Jogo.tabuleiro[4] &&
+        Jogo.tabuleiro[4] === Jogo.tabuleiro[5] &&
+        Jogo.tabuleiro[5] !== ""
+      ) {
+        Jogo.vitoria.push(3, 4, 5);
+      }
+      if (
+        Jogo.tabuleiro[6] === Jogo.tabuleiro[7] &&
+        Jogo.tabuleiro[7] === Jogo.tabuleiro[8] &&
+        Jogo.tabuleiro[8] !== ""
+      ) {
+        Jogo.vitoria.push(6, 7, 8);
+      }
+
+      if (
+        Jogo.tabuleiro[0] === Jogo.tabuleiro[3] &&
+        Jogo.tabuleiro[3] === Jogo.tabuleiro[6] &&
+        Jogo.tabuleiro[6] !== ""
+      ) {
+        Jogo.vitoria.push(0, 3, 6);
+      }
+
+      if (
+        Jogo.tabuleiro[1] === Jogo.tabuleiro[4] &&
+        Jogo.tabuleiro[4] === Jogo.tabuleiro[7] &&
+        Jogo.tabuleiro[7] !== ""
+      ) {
+        Jogo.vitoria.push(1, 4, 7);
+      }
+
+      if (
+        Jogo.tabuleiro[2] === Jogo.tabuleiro[5] &&
+        Jogo.tabuleiro[5] === Jogo.tabuleiro[8] &&
+        Jogo.tabuleiro[8] !== ""
+      ) {
+        Jogo.vitoria.push(2, 5, 8);
+      }
+
+      if (
+        Jogo.tabuleiro[0] === Jogo.tabuleiro[4] &&
+        Jogo.tabuleiro[4] === Jogo.tabuleiro[8] &&
+        Jogo.tabuleiro[8] !== ""
+      ) {
+        Jogo.vitoria.push(0, 4, 8);
+      }
+
+      if (
+        Jogo.tabuleiro[2] === Jogo.tabuleiro[4] &&
+        Jogo.tabuleiro[4] === Jogo.tabuleiro[6] &&
+        Jogo.tabuleiro[6] !== ""
+      ) {
+        Jogo.vitoria.push(2, 4, 6);
+      }
+
+      console.log(Jogo.tabuleiro);
+      console.log(Jogo.vitoria);
 
       io.emit("atualizacao", Jogo.toJson());
 
