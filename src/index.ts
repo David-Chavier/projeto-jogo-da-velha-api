@@ -43,6 +43,10 @@ app.put(
   "/jogador/:id_jogador01/jogo/:id/:id_jogador02",
   new JogosController().update
 );
+app.put(
+  "/jogador/:id_jogador01/jogo/:id/:id_jogador02/reiniciar",
+  new JogosController().reiniciarJogo
+);
 
 const PORT = process.env.PORT;
 

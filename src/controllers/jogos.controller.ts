@@ -90,13 +90,17 @@ export class JogosController {
         Jogo.id_jogador01 !== id_jogador01 &&
         Jogo.id_jogador02 !== id_jogador02
       ) {
-        return res.status(404).send({ ok: false, message: "Jogada Invalida" });
+        return res.status(404).send({
+          ok: false,
+          message: "Jogada Invalida, jogadores não reconhecidos",
+        });
       }
 
       if (Jogo.tabuleiro[index] !== "") {
         return res.status(400).send({
           ok: false,
-          message: "jogada invalida",
+          message:
+            "jogada invalida, não pode mudar valores de casas preenchidas",
           data: Jogo.toJson(),
         });
       }
@@ -104,7 +108,7 @@ export class JogosController {
       if (!Jogo.id_jogador02) {
         return res.status(400).send({
           ok: false,
-          message: "jogada invalida",
+          message: "jogada invalida, o jogador02 não conectou ainda",
           data: Jogo.toJson(),
         });
       }
@@ -112,7 +116,7 @@ export class JogosController {
       if (id_jogador01.length > 11 && Jogo.valor === "X") {
         return res.status(400).send({
           ok: false,
-          message: "jogada invalida",
+          message: "jogada invalida, aguarde a jogada do outro jogador",
           data: Jogo.toJson(),
         });
       }
@@ -120,23 +124,19 @@ export class JogosController {
       if (id_jogador02.length > 11 && Jogo.valor === "O") {
         return res.status(400).send({
           ok: false,
-          message: "jogada invalida",
+          message: "jogada invalida, aguarde a jogada do outro jogador",
           data: Jogo.toJson(),
         });
       }
 
-      let valorVariavel = "";
-
       if (id_jogador01.length > 11) {
         Jogo.valor = "X";
-        valorVariavel = "X";
       }
       if (id_jogador02.length > 11) {
         Jogo.valor = "O";
-        valorVariavel = "O";
       }
 
-      Jogo.tabuleiro.splice(index, 1, valorVariavel);
+      Jogo.tabuleiro.splice(index, 1, Jogo.valor);
 
       if (
         Jogo.tabuleiro[0] === Jogo.tabuleiro[1] &&
@@ -201,15 +201,39 @@ export class JogosController {
         Jogo.vitoria.push(2, 4, 6);
       }
 
-      console.log(Jogo.tabuleiro);
-      console.log(Jogo.vitoria);
-
       io.emit("atualizacao", Jogo.toJson());
 
       res.status(200).send({
         ok: true,
         message: "jogada realizada com sucesso",
         data: Jogo.toJson(),
+      });
+    } catch (err: any) {
+      return;
+    }
+  }
+
+  public async reiniciarJogo(req: Request, res: Response) {
+    try {
+      const { id, id_jogador01, id_jogador02 } = req.params;
+
+      const jogo = jogos.find((jogo) => jogo.id === id);
+
+      if (!jogo) {
+        return res
+          .status(404)
+          .send({ ok: false, message: "Jogo was not found" });
+      }
+
+      jogo.tabuleiro.splice(0, 9, "", "", "", "", "", "", "", "", "");
+      jogo.vitoria.splice(0);
+
+      io.emit("atualizacao", jogo.toJson());
+
+      res.status(200).send({
+        ok: true,
+        message: "jogo reiniciado com sucesso",
+        data: jogo.toJson(),
       });
     } catch (err: any) {
       return;
